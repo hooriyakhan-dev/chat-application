@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Log in · Hoories — your people, always close</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Bricolage+Grotesque:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="sky"><i></i><i></i><i></i></div>
+    <main id="auth" class="auth">
+      <button
+        id="thb2"
+        class="thA"
+        type="button"
+        aria-label="Switch light or dark theme"
+      >
+        ☾ Dark
+      </button>
+      <section class="hero">
+        <div class="pdw">
+          <svg class="pd" viewBox="0 0 120 128" aria-hidden="true">
+            <ellipse
+              cx="60"
+              cy="108"
+              rx="32"
+              ry="21"
+              fill="#fff7ea"
+              stroke="#2b2226"
+              stroke-width="2.5"
+            />
+            <ellipse
+              cx="30"
+              cy="104"
+              rx="8"
+              ry="14"
+              transform="rotate(25 30 104)"
+              fill="#2b2226"
+            />
+            <circle cx="27" cy="26" r="14" fill="#2b2226" />
+            <circle cx="93" cy="26" r="14" fill="#2b2226" />
+            <circle cx="27" cy="26" r="6" fill="#ff8da1" opacity=".55" />
+            <circle cx="93" cy="26" r="6" fill="#ff8da1" opacity=".55" />
+            <ellipse
+              cx="60"
+              cy="58"
+              rx="40"
+              ry="35"
+              fill="#fff7ea"
+              stroke="#2b2226"
+              stroke-width="2.5"
+            />
+            <ellipse
+              cx="42"
+              cy="56"
+              rx="10"
+              ry="13"
+              transform="rotate(20 42 56)"
+              fill="#2b2226"
+            />
+            <ellipse
+              cx="78"
+              cy="56"
+              rx="10"
+              ry="13"
+              transform="rotate(-20 78 56)"
+              fill="#2b2226"
+            />
+            <circle cx="43" cy="54" r="4" fill="#fff" />
+            <circle cx="77" cy="54" r="4" fill="#fff" />
+            <circle cx="44" cy="55" r="2" fill="#2b2226" />
+            <circle cx="76" cy="55" r="2" fill="#2b2226" />
+            <ellipse cx="60" cy="68" rx="5" ry="3.5" fill="#2b2226" />
+            <path
+              d="M53 74q7 6 14 0"
+              fill="none"
+              stroke="#2b2226"
+              stroke-width="2.2"
+              stroke-linecap="round"
+            />
+            <circle cx="32" cy="72" r="5" fill="#ff8da1" opacity=".5" />
+            <circle cx="88" cy="72" r="5" fill="#ff8da1" opacity=".5" />
+            <path d="M46 92l14 6-14 8zM74 92l-14 6 14 8z" fill="#d94a6c" />
+            <circle cx="60" cy="98" r="4.5" fill="#b83358" />
+            <g class="wv">
+              <ellipse
+                cx="96"
+                cy="90"
+                rx="8"
+                ry="16"
+                transform="rotate(-25 96 90)"
+                fill="#2b2226"
+              />
+            </g></svg
+          ><span class="sb">Hey, welcome!</span>
+        </div>
+        <h1 class="brand">Hoories<b>.</b></h1>
+        <p class="tag">Your people, always close.</p>
+        <span class="fp">Frontend Final Project · by Hooriya Khan</span>
+        <div class="stack">
+          <div class="fc c1">
+            <span
+              class="av sm"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  hsl(335 70% 80%),
+                  hsl(5 65% 62%)
+                );
+              "
+              >F</span
+            >
+            <div>
+              <b>Fizza</b><small>Demo is on Friday, you've got this</small>
+            </div>
+          </div>
+          <div class="fc c2">
+            <div class="mb">Almost done. It looks beautiful</div>
+            <small>9:41 ✓✓</small>
+          </div>
+          <div class="fc c3">
+            <span class="ring new"
+              ><span
+                class="av sm"
+                style="
+                  background: linear-gradient(
+                    135deg,
+                    hsl(28 70% 80%),
+                    hsl(58 65% 62%)
+                  );
+                "
+                >H</span
+              ></span
+            >
+            <div><b>New status</b><small>Hussain, 20 min ago</small></div>
+          </div>
+          <div class="fc c4">
+            <span>✦</span>
+            <div>
+              <b>Hoories AI</b
+              ><small
+                >Typing<i class="dots"><u></u><u></u><u></u></i
+              ></small>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="card">
+        <div class="tabs">
+          <button class="on" data-t="login">Log in</button
+          ><button data-t="signup">Sign up</button>
+        </div>
+        <div class="hd">
+          <h2 id="ttl">Welcome back</h2>
+          <p id="sub">Log in to pick up where you left off.</p>
+        </div>
+        <form id="af">
+          <div id="so" hidden>
+            <label class="pick"
+              ><span id="pp" class="av lg">+</span
+              ><span
+                >Add a profile photo<small
+                  >optional, change it anytime</small
+                ></span
+              ><input type="file" id="pf" accept="image/*" hidden
+            /></label>
+            <label class="fld"
+              >Your name<input id="nm" placeholder="Hooriya Khan"
+            /></label>
+          </div>
+          <label class="fld"
+            >Email<span class="w"
+              ><i
+                ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="3" y="5" width="18" height="14" rx="3" />
+                  <path d="m4 8 8 6 8-6" /></svg></i
+              ><input
+                id="em"
+                type="email"
+                placeholder="you@example.com"
+                required /></span
+          ></label>
+          <label class="fld"
+            >Password<span class="w"
+              ><i
+                ><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="5" y="11" width="14" height="10" rx="3" />
+                  <path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg></i
+              ><input
+                id="pw"
+                type="password"
+                placeholder="At least 6 characters"
+                minlength="6"
+                required
+              /><button type="button" class="eye" id="eye">Show</button></span
+            ></label
+          >
+          <div class="rowx">
+            <label><input type="checkbox" checked />Keep me signed in</label
+            ><button type="button" class="lnk" id="fgt">
+              Forgot password?
+            </button>
+          </div>
+          <p id="err" class="err" role="alert"></p>
+          <button class="pri" id="sb">Log in</button>
+        </form>
+        <div class="or"><span>or</span></div>
+        <button class="gg" id="gg" type="button">
+          <svg width="18" height="18" viewBox="0 0 48 48">
+            <path
+              fill="#EA4335"
+              d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"
+            />
+            <path
+              fill="#4285F4"
+              d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.5-4.1 7-10.2 7-17.6z"
+            />
+            <path
+              fill="#FBBC05"
+              d="M10.5 28.7a14.5 14.5 0 0 1 0-9.4l-7.9-6.1a24 24 0 0 0 0 21.6l7.9-6.1z"
+            />
+            <path
+              fill="#34A853"
+              d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"
+            /></svg
+          >Continue with Google
+        </button>
+        <p class="tos">
+          By continuing, you agree to the Terms and Privacy Policy.
+        </p>
+      </section>
+    </main>
+    <div id="wlc" hidden>
+      <div class="wb">
+        <div class="pdl">
+          <svg class="pd" viewBox="0 0 120 128" aria-hidden="true">
+            <ellipse
+              cx="60"
+              cy="108"
+              rx="32"
+              ry="21"
+              fill="#fff7ea"
+              stroke="#2b2226"
+              stroke-width="2.5"
+            />
+            <ellipse
+              cx="30"
+              cy="104"
+              rx="8"
+              ry="14"
+              transform="rotate(25 30 104)"
+              fill="#2b2226"
+            />
+            <circle cx="27" cy="26" r="14" fill="#2b2226" />
+            <circle cx="93" cy="26" r="14" fill="#2b2226" />
+            <circle cx="27" cy="26" r="6" fill="#ff8da1" opacity=".55" />
+            <circle cx="93" cy="26" r="6" fill="#ff8da1" opacity=".55" />
+            <ellipse
+              cx="60"
+              cy="58"
+              rx="40"
+              ry="35"
+              fill="#fff7ea"
+              stroke="#2b2226"
+              stroke-width="2.5"
+            />
+            <ellipse
+              cx="42"
+              cy="56"
+              rx="10"
+              ry="13"
+              transform="rotate(20 42 56)"
+              fill="#2b2226"
+            />
+            <ellipse
+              cx="78"
+              cy="56"
+              rx="10"
+              ry="13"
+              transform="rotate(-20 78 56)"
+              fill="#2b2226"
+            />
+            <circle cx="43" cy="54" r="4" fill="#fff" />
+            <circle cx="77" cy="54" r="4" fill="#fff" />
+            <circle cx="44" cy="55" r="2" fill="#2b2226" />
+            <circle cx="76" cy="55" r="2" fill="#2b2226" />
+            <ellipse cx="60" cy="68" rx="5" ry="3.5" fill="#2b2226" />
+            <path
+              d="M53 74q7 6 14 0"
+              fill="none"
+              stroke="#2b2226"
+              stroke-width="2.2"
+              stroke-linecap="round"
+            />
+            <circle cx="32" cy="72" r="5" fill="#ff8da1" opacity=".5" />
+            <circle cx="88" cy="72" r="5" fill="#ff8da1" opacity=".5" />
+            <path d="M46 92l14 6-14 8zM74 92l-14 6 14 8z" fill="#d94a6c" />
+            <circle cx="60" cy="98" r="4.5" fill="#b83358" />
+            <g class="wv">
+              <ellipse
+                cx="96"
+                cy="90"
+                rx="8"
+                ry="16"
+                transform="rotate(-25 96 90)"
+                fill="#2b2226"
+              />
+            </g>
+          </svg>
+        </div>
+        <div class="sbl">Hey, welcome to Hoories chat app!</div>
+        <div class="ld"><u></u><u></u><u></u></div>
+      </div>
+    </div>
+    <div id="toast" class="toast"></div>
+    <script src="env.js"></script>
+    <script>
+      /* Hoories - login page: login, signup and Google sign-in (uses Firebase + Cloudinary, keys come from env.js) */
+      const $ = (i) => document.getElementById(i);
+      const toast = (m) => {
+        const t = $("toast");
+        t.textContent = m;
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 3000);
+      };
+      const ENV = window.ENV,
+        fb = {};
+      const FB_URL = "https://www.gstatic.com/firebasejs/13.0.0/";
+      async function initFB() {
+        if (fb.ready) return fb;
+        const [A, Au, D] = await Promise.all([
+          import(FB_URL + "firebase-app.js"),
+          import(FB_URL + "firebase-auth.js"),
+          import(FB_URL + "firebase-database.js"),
+        ]);
+        const app = A.initializeApp(ENV.FIREBASE);
+        Object.assign(fb, {
+          Au,
+          D,
+          auth: Au.getAuth(app),
+          db: D.getDatabase(app),
+          ready: true,
+        });
+        return fb;
+      }
+      async function uploadToCloudinary(file) {
+        if (!ENV.CLOUDINARY_CLOUD_NAME) return URL.createObjectURL(file); // not set yet: preview on this device only
+        const fd = new FormData();
+        fd.append("file", file);
+        fd.append("upload_preset", ENV.CLOUDINARY_UPLOAD_PRESET);
+        const r = await fetch(
+          "https://api.cloudinary.com/v1_1/" +
+            ENV.CLOUDINARY_CLOUD_NAME +
+            "/image/upload",
+          { method: "POST", body: fd },
+        );
+        if (!r.ok) throw new Error("Cloudinary upload failed");
+        return (await r.json()).secure_url;
+      }
+      const ERR = {
+        "auth/email-already-in-use":
+          "This email already has an account. Try logging in.",
+        "auth/invalid-credential": "Wrong email or password.",
+        "auth/wrong-password": "Wrong email or password.",
+        "auth/user-not-found": "Wrong email or password.",
+        "auth/weak-password": "Password must be at least 6 characters.",
+        "auth/invalid-email": "Enter a valid email address.",
+        "auth/popup-closed-by-user": "Google sign-in was closed.",
+        "auth/network-request-failed": "No internet connection.",
+        "auth/operation-not-allowed":
+          "Turn this sign-in method on in Firebase > Authentication > Sign-in method.",
+        "auth/unauthorized-domain":
+          "Open the app at http://localhost:PORT, or add this address in Firebase > Authentication > Settings > Authorized domains.",
+      };
+      const errMsg = (e) =>
+        /PERMISSION_DENIED/i.test(e.message || "")
+          ? "The database rules are blocking this. Paste firebase-rules.json into Realtime Database > Rules."
+          : ERR[e.code] || e.message || "Something went wrong.";
+
+      let mode = "login",
+        pick = null,
+        busy = false;
+
+      /* theme (remembered between pages) */
+      const root = document.documentElement;
+      root.dataset.th = localStorage.getItem("hoories-th") || "light";
+      const paintTh = () => {
+        $("thb2").textContent =
+          root.dataset.th === "dark" ? "☀ Light" : "☾ Dark";
+      };
+      $("thb2").onclick = () => {
+        root.dataset.th = root.dataset.th === "dark" ? "light" : "dark";
+        localStorage.setItem("hoories-th", root.dataset.th);
+        paintTh();
+      };
+      paintTh();
+
+      /* tabs, photo, password eye */
+      document.querySelectorAll(".tabs button").forEach(
+        (b) =>
+          (b.onclick = () => {
+            mode = b.dataset.t;
+            const s = mode === "signup";
+            document
+              .querySelectorAll(".tabs button")
+              .forEach((x) => x.classList.toggle("on", x === b));
+            $("so").hidden = !s;
+            $("sb").textContent = s ? "Create account" : "Log in";
+            $("err").textContent = "";
+            $("ttl").textContent = s ? "Create your account" : "Welcome back";
+            $("sub").textContent = s
+              ? "Join Hoories in a minute. It's free."
+              : "Log in to pick up where you left off.";
+            $("fgt").hidden = s;
+          }),
+      );
+      $("pf").onchange = (e) => {
+        pick = e.target.files[0];
+        if (!pick) return;
+        const p = $("pp");
+        p.textContent = "";
+        p.style.backgroundImage = `url(${URL.createObjectURL(pick)})`;
+        p.style.border = "0";
+      };
+      $("eye").onclick = () => {
+        const p = $("pw");
+        p.type = p.type === "password" ? "text" : "password";
+        $("eye").textContent = p.type === "password" ? "Show" : "Hide";
+      };
+
+      /* welcome screen, then open the chat app */
+      function welcome() {
+        const w = $("wlc");
+        w.hidden = false;
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => w.classList.add("in")),
+        );
+        setTimeout(() => {
+          location.href = "index.html";
+        }, 2700);
+      }
+
+      /* Firebase: username + profile */
+      async function makeUsername(base, uid) {
+        base = (base || "user")
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "")
+          .slice(0, 14);
+        if (base.length < 3) base += "user";
+        for (let i = 0; i < 6; i++) {
+          const n = i ? base + ((Math.random() * 900 + 100) | 0) : base;
+          const r = await fb.D.runTransaction(
+            fb.D.ref(fb.db, "usernames/" + n),
+            (c) => (c === null ? uid : undefined),
+          );
+          if (r.committed) return n;
+        }
+        throw new Error("Could not create a username, try again.");
+      }
+      async function ensureProfile(user, name, photo) {
+        const r = fb.D.ref(fb.db, "users/" + user.uid),
+          s = await fb.D.get(r);
+        if (s.exists()) return;
+        const p = {
+          name: name || user.displayName || user.email.split("@")[0],
+          photo: photo || user.photoURL || "",
+          h: (Math.random() * 360) | 0,
+        };
+        p.username = await makeUsername(user.email.split("@")[0], user.uid);
+        await fb.D.set(r, p);
+      }
+
+      $("af").onsubmit = async (e) => {
+        e.preventDefault();
+        if (busy) return;
+        const n = $("nm").value.trim(),
+          em = $("em").value.trim(),
+          pw = $("pw").value,
+          er = $("err"),
+          b = $("sb"),
+          t = b.textContent;
+        if (mode === "signup" && !n) {
+          er.textContent = "Please enter your name.";
+          return;
+        }
+        busy = true;
+        er.textContent = "";
+        b.disabled = true;
+        let ok = false;
+        try {
+          await initFB();
+          let user;
+          if (mode === "signup") {
+            b.textContent = "Creating account...";
+            user = (await fb.Au.createUserWithEmailAndPassword(fb.auth, em, pw))
+              .user;
+            let photo = "";
+            if (pick) {
+              try {
+                photo = await uploadToCloudinary(pick);
+              } catch (x) {
+                toast("Photo upload failed, continuing without it");
+              }
+            }
+            if (photo.startsWith("blob:")) photo = "";
+            await ensureProfile(user, n, photo);
+          } else {
+            b.textContent = "Logging in...";
+            user = (await fb.Au.signInWithEmailAndPassword(fb.auth, em, pw))
+              .user;
+            await ensureProfile(user);
+          }
+          ok = true;
+        } catch (x) {
+          er.textContent = errMsg(x);
+        }
+        b.textContent = t;
+        b.disabled = false;
+        busy = false;
+        if (ok) welcome();
+      };
+      $("gg").onclick = async () => {
+        if (busy) return;
+        busy = true;
+        let ok = false;
+        try {
+          await initFB();
+          const r = await fb.Au.signInWithPopup(
+            fb.auth,
+            new fb.Au.GoogleAuthProvider(),
+          );
+          await ensureProfile(r.user);
+          ok = true;
+        } catch (x) {
+          $("err").textContent = errMsg(x);
+        }
+        busy = false;
+        if (ok) welcome();
+      };
+      $("fgt").onclick = async () => {
+        const em = $("em").value.trim();
+        if (!em) {
+          $("err").textContent = "Type your email first.";
+          return;
+        }
+        try {
+          await initFB();
+          await fb.Au.sendPasswordResetEmail(fb.auth, em);
+          toast("Password reset email sent");
+        } catch (x) {
+          $("err").textContent = errMsg(x);
+        }
+      };
+
+      /* already logged in? go straight to the app */
+      initFB()
+        .then(() =>
+          fb.Au.onAuthStateChanged(fb.auth, (u) => {
+            if (u && !busy) location.replace("index.html");
+          }),
+        )
+        .catch(() => {});
+    </script>
+  </body>
+</html>
