@@ -1,6 +1,4 @@
-/* Hoories - chat page (index.html)
-   Uses: Firebase (login check, real-time chats), Cloudinary (photo uploads),
-   Groq (Hoories AI). The keys are read from env.js. */
+
 const $ = (i) => document.getElementById(i);
 const toast = (m) => {
   const t = $("toast");
@@ -315,6 +313,10 @@ $("emo").innerHTML = [
   "👋",
   "🤝",
   "😴",
+  "👻",
+  "👽",
+
+  
 ]
   .map((x) => `<button type="button">${x}</button>`)
   .join("");
@@ -360,7 +362,7 @@ $("profv").onclick = (e) => {
   }
 };
 /* ---------- Hoories AI (Groq) ---------- */
-const GROQ_KEY = ENV.GROQ_API_KEY || ""; // <- apni Groq API key yahan lagayein
+const GROQ_KEY = ENV.GROQ_API_KEY; 
 const GROQ_MODEL = "llama-3.3-70b-versatile";
 const aiTools = [
   {
