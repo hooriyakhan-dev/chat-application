@@ -1,5 +1,5 @@
 
-      /* Hoories - login page: login, signup and Google sign-in (uses Firebase + Cloudinary, keys come from env.js) */
+     window.$ = window.$ || ((i) => document.getElementById(i));
       const $ = (i) => document.getElementById(i);
       const toast = (m) => {
         const t = $("toast");
