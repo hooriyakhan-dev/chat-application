@@ -690,7 +690,7 @@ function mk(pid, chatId, u) {
 function mkGroup() {
   const c = {
     id: "community",
-    name: "Hoories Community",
+    name: "Blooming Bonds 🌸",
     role: "Group · everyone",
     h: 330,
     ic: "👥",

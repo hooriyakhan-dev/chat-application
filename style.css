@@ -23,25 +23,27 @@ html[data-th="dark"] {
   --tl: #f3d58a;
 }
 html[data-th="light"] {
-  --bg: #efc9c9;
-  --pn: rgba(90, 30, 40, 0.09);
-  --pn2: rgba(90, 30, 40, 0.15);
-  --tx: #2b1519;
-  --mut: rgba(43, 21, 25, 0.66);
-  --line: rgba(43, 21, 25, 0.16);
-  --acc: linear-gradient(120deg, #d94a6c, #e8647f);
+  --bg: #f2d2c4;
+  --pn: rgba(235, 198, 185, 0.9);
+  --pn2: rgba(215, 168, 152, 0.45);
+  --tx: #2e171b;
+  --mut: rgba(46, 23, 27, 0.72);
+  --line: rgba(46, 23, 27, 0.15);
+  --acc: linear-gradient(120deg, #c7385a, #d64d6d);
   --acx: #fff;
-  --mine: linear-gradient(135deg, #d94a6c, #c23a5e);
+  --mine: linear-gradient(135deg, #c7385a, #ad2c4b);
   --mtx: #fff;
-  --them: #f7e3d9;
-  --g1: #ffd9d1;
-  --g2: #f7b5a8;
-  --g3: #f3d58a;
-  --inp: rgba(90, 30, 40, 0.1);
-  --acn: #b8324f;
-  --ring: linear-gradient(135deg, #d94a6c, #f0a05a, #f3d58a);
-  --tl: #d79a1f;
+  --them: #e0b8ab;
+  --g1: #e6b8a8;
+  --g2: #dfa08e;
+  --g3: #d19a86;
+  --inp: rgba(46, 23, 27, 0.06);
+  --acn: #ad2c4b;
+  --ring: linear-gradient(135deg, #c7385a, #d48255, #d6aa52);
+  --tl: #8c5512;
 }
+
+
 * {
   box-sizing: border-box;
   margin: 0;
