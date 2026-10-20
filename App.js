@@ -85,6 +85,7 @@ let me,
   reply = null,
   nid = 0,
   view = "chat";
+const MEMBERS = {}; // people who write in the group chat
 const C = [
   {
     id: "bot",
@@ -98,7 +99,7 @@ const C = [
   },
 ];
 const g = (c) => C.find((x) => x.id === c),
-  who = (u) => (u === "me" ? me : g(u));
+  who = (u) => (u === "me" ? me : g(u) || MEMBERS[u]);
 function add(id, from, text, ago = 0, rp = null) {
   const m = {
     id: "m" + ++nid,
@@ -161,7 +162,7 @@ function renderList() {
     .sort((a, b) => last(b).at - last(a).at)
     .map((c) => {
       const l = last(c);
-      return `<button class="it ${c.id === cur ? "on" : ""}" data-id="${c.id}">${av(c)}<span class="mid"><b>${esc(c.name)}</b><small>${l.from === "me" ? "You: " : c.group ? esc(who(l.from).name) + ": " : ""}${esc(l.text)}</small></span><span class="rt">${tf(l.at)}${c.u ? `<span class="badge">${c.u}</span>` : ""}</span></button>`;
+      return `<button class="it ${c.id === cur ? "on" : ""}" data-id="${c.id}">${av(c)}<span class="mid"><b>${esc(c.name)}</b><small>${l.from === "me" ? "You: " : c.group && who(l.from) ? esc(who(l.from).name) + ": " : ""}${esc(l.text)}</small></span><span class="rt">${tf(l.at)}${c.u ? `<span class="badge">${c.u}</span>` : ""}</span></button>`;
     })
     .join("");
 }
@@ -182,13 +183,14 @@ function renderRoom() {
   $("hav").innerHTML = av(c);
   $("hn").textContent = c.name;
   $("hr").textContent = c.role;
+  $("hed").hidden = !!c.group; // only people can be renamed
   $("hs").className = c.typing ? "t" : "";
   $("hs").textContent = c.typing
     ? c.group
       ? "someone is typing…"
       : "typing…"
     : c.group
-      ? "Gufraan, Hussain, Fizza, Hasan, Aizal"
+      ? "Open to everyone on Hoories"
       : c.on
         ? "online"
         : c.seen;
@@ -204,7 +206,7 @@ function renderRoom() {
         const q = m.rp
           ? `<button type="button" class="qt" data-j="${m.rp.id}"><b>${esc(m.rp.name)}</b><span>${esc(m.rp.text)}</span></button>`
           : "";
-        return `<div class="row ${mine ? "me" : ""} ${f ? "f" : ""}" id="m-${m.id}">${f ? av(u, "sm").replace("<i></i>", "") : '<span style="width:32px;flex:none"></span>'}<div class="bub">${f && !mine && c.group ? `<div class="nm">${esc(u.name)}</div>` : ""}${q}${m.from === "bot" ? md2(m.text) + `<button class="cp" data-cp="${m.id}">Copy</button>` : esc(m.text)}<span class="tm">${tf(m.at)}${mine ? ` <span class="tk">${m.rd ? "✓✓" : "✓"}</span>` : ""}</span></div><button class="rp" data-r="${m.id}" aria-label="Reply" title="Reply">↩</button></div>`;
+        return `<div class="row ${mine ? "me" : ""} ${f ? "f" : ""}" id="m-${m.id}">${f ? av(u, "sm").replace("<i></i>", "") : '<span style="width:32px;flex:none"></span>'}<div class="bub">${f && !mine && c.group ? `<div class="nm">${esc(u.name)}</div>` : ""}${q}${m.from === "bot" ? md2(m.text) + `<button class="cp" data-cp="${m.id}">Copy</button>` : esc(m.text)}${rxHtml(m)}<span class="tm">${tf(m.at)}${mine ? ` <span class="tk">${m.rd ? "✓✓" : "✓"}</span>` : ""}</span></div><button class="rp" data-x="${m.id}" aria-label="React" title="React">☺</button><button class="rp" data-r="${m.id}" aria-label="Reply" title="Reply">↩</button></div>`;
       })
       .join("");
   $("msgs").scrollTop = 1e9;
@@ -230,11 +232,90 @@ $("msgs").onclick = (e) => {
     $("tx").focus();
   }
 };
+/* ---------- reactions ---------- */
+const REACTIONS = ["👍", "❤️", "😂", "😮", "😢", "🙏"];
+let pickId = null;
+const rxPick = $("rxpick");
+rxPick.innerHTML = REACTIONS.map(
+  (e) => `<button type="button" data-pe="${e}">${e}</button>`,
+).join("");
+/* m.rx is { userId: emoji }; show one pill per emoji with its count */
+function rxHtml(m) {
+  const counts = {};
+  Object.values(m.rx || {}).forEach((e) => (counts[e] = (counts[e] || 0) + 1));
+  const mine = (m.rx || {})[me.uid];
+  const pills = Object.entries(counts)
+    .map(
+      ([e, n]) =>
+        `<button type="button" class="rxp${e === mine ? " on" : ""}" data-e="${e}" data-m="${m.id}">${e} ${n}</button>`,
+    )
+    .join("");
+  return pills ? `<div class="rxs">${pills}</div>` : "";
+}
+function react(id, emoji) {
+  const c = g(cur),
+    m = c.m.find((x) => x.id === id);
+  if (!m) return;
+  const next = (m.rx || {})[me.uid] === emoji ? null : emoji; // same emoji again removes it
+  m.rx = { ...(m.rx || {}) };
+  if (next) m.rx[me.uid] = next;
+  else delete m.rx[me.uid];
+  all();
+  if (c.id !== "bot")
+    fb.D.set(R(msgPath(c) + "/" + id + "/reactions/" + me.uid), next).catch(
+      (x) => toast(errMsg(x)),
+    );
+}
+$("msgs").addEventListener("click", (e) => {
+  const pill = e.target.closest("[data-e]"),
+    btn = e.target.closest("[data-x]");
+  if (pill) return react(pill.dataset.m, pill.dataset.e);
+  if (!btn) return;
+  pickId = btn.dataset.x;
+  const r = btn.getBoundingClientRect();
+  rxPick.hidden = false;
+  rxPick.style.top = Math.max(8, r.top - 54) + "px";
+  rxPick.style.left =
+    Math.min(Math.max(8, r.left - 100), window.innerWidth - 260) + "px";
+});
+rxPick.onclick = (e) => {
+  const b = e.target.closest("[data-pe]");
+  if (b) react(pickId, b.dataset.pe);
+  rxPick.hidden = true;
+};
+document.addEventListener("click", (e) => {
+  if (!e.target.closest("[data-x], #rxpick")) rxPick.hidden = true;
+});
 $("rx").onclick = () => {
   reply = null;
   $("rb").hidden = true;
 };
-$("emo").innerHTML = ["😂", "❤️", "🔥", "👏", "🙏", "😍"]
+$("emo").innerHTML = [
+  "😀",
+  "😂",
+  "😍",
+  "🥰",
+  "😎",
+  "🤔",
+  "😢",
+  "😡",
+  "👍",
+  "👏",
+  "🙏",
+  "💪",
+  "🔥",
+  "❤️",
+  "💯",
+  "🎉",
+  "✨",
+  "🌸",
+  "🍕",
+  "☕",
+  "🎶",
+  "👋",
+  "🤝",
+  "😴",
+]
   .map((x) => `<button type="button">${x}</button>`)
   .join("");
 $("eb").onclick = () => ($("emo").hidden = !$("emo").hidden);
@@ -542,44 +623,84 @@ const R = (p) => fb.D.ref(fb.db, p);
 let unsubs = [];
 const FOUND = {};
 
+/* path of the messages of a chat: a person chat or the group */
+const msgPath = (c) =>
+  (c.group ? "groups/" + c.id : "chats/" + c.chatId) + "/messages";
+
+/* listen (in real time) to the messages and reactions of one chat */
+function listen(c) {
+  const t0 = Date.now(),
+    q = fb.D.query(R(msgPath(c)), fb.D.limitToLast(300));
+  unsubs.push(
+    fb.D.onChildAdded(q, (s) => {
+      const d = s.val();
+      if (!d || c.m.some((x) => x.id === s.key)) return;
+      const mine = d.from === me.uid;
+      if (c.group && !mine)
+        MEMBERS[d.from] = {
+          name: d.name || "Someone",
+          h: d.h || 40,
+          photo: d.photo || "",
+        };
+      c.m.push({
+        id: s.key,
+        from: mine ? "me" : d.from,
+        text: d.text,
+        at: new Date(d.at),
+        rp: d.rp || null,
+        rx: d.reactions || {},
+        rd: true,
+      });
+      if (!mine && d.at > t0 && !(cur === c.id && view === "chat")) c.u++;
+      all();
+    }),
+  );
+  unsubs.push(
+    fb.D.onChildChanged(q, (s) => {
+      const m = c.m.find((x) => x.id === s.key);
+      if (m) {
+        m.rx = (s.val() || {}).reactions || {};
+        all();
+      }
+    }),
+  );
+}
+
 function mk(pid, chatId, u) {
   const c = {
-      id: pid,
-      name: u.name,
-      real: u.name,
-      role: "@" + (u.username || ""),
-      h: u.h || 40,
-      photo: u.photo || "",
-      on: 0,
-      un: u.username || "",
-      m: [],
-      u: 0,
-      chatId,
-      ts: Date.now(),
-    },
-    t0 = Date.now();
+    id: pid,
+    name: u.name,
+    real: u.name,
+    role: "@" + (u.username || ""),
+    h: u.h || 40,
+    photo: u.photo || "",
+    on: 0,
+    un: u.username || "",
+    m: [],
+    u: 0,
+    chatId,
+    ts: Date.now(),
+  };
   C.push(c);
-  unsubs.push(
-    fb.D.onChildAdded(
-      fb.D.query(R("chats/" + chatId + "/messages"), fb.D.limitToLast(300)),
-      (s) => {
-        const d = s.val();
-        if (!d || c.m.some((x) => x.id === s.key)) return;
-        const mine = d.from === me.uid;
-        c.m.push({
-          id: s.key,
-          from: mine ? "me" : pid,
-          text: d.text,
-          at: new Date(d.at),
-          rp: d.rp || null,
-          rd: true,
-        });
-        if (!mine && d.at > t0 && !(cur === pid && view === "chat")) c.u++;
-        all();
-      },
-    ),
-  );
+  listen(c);
   return c;
+}
+
+/* the default chat: a group that every user joins automatically */
+function mkGroup() {
+  const c = {
+    id: "community",
+    name: "Hoories Community",
+    role: "Group · everyone",
+    h: 330,
+    ic: "👥",
+    group: true,
+    m: [],
+    u: 0,
+    ts: Date.now(),
+  };
+  C.push(c);
+  listen(c);
 }
 
 function start(user, p) {
@@ -592,6 +713,8 @@ function start(user, p) {
     h: p.h || 40,
     username: p.username,
   };
+  mkGroup();
+  cur = "community"; // open the group first, so the app never looks empty
   unsubs.push(
     fb.D.onValue(R("userChats/" + me.uid), (s) => {
       const v = s.val() || {};
@@ -667,8 +790,11 @@ $("cf").onsubmit = (e) => {
     askAI(t, m);
     return;
   }
-  fb.D.push(R("chats/" + g(id).chatId + "/messages"), {
+  fb.D.push(R(msgPath(g(id))), {
     from: me.uid,
+    name: me.name,
+    h: me.h,
+    photo: me.photo.startsWith("blob:") ? "" : me.photo,
     text: t.slice(0, 1000),
     at: Date.now(),
     rp: rp || null,

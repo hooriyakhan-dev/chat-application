@@ -2886,3 +2886,51 @@ html[data-th="light"] .sky i:nth-child(3) {
 .hint {
   display: none;
 }
+
+/* ---- reactions + bigger emoji picker ---- */
+.rxs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+.rxp {
+  font-size: 12.5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.12);
+  border: 1px solid transparent;
+}
+.me .rxp {
+  background: rgba(255, 255, 255, 0.2);
+}
+.rxp.on {
+  border-color: var(--acn);
+}
+.rxpick {
+  position: fixed;
+  z-index: 50;
+  display: flex;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--bg);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+.rxpick[hidden] {
+  display: none;
+}
+.rxpick button {
+  font-size: 22px;
+  padding: 2px 6px;
+  border-radius: 50%;
+  transition: transform 0.15s;
+}
+.rxpick button:hover {
+  transform: scale(1.25);
+}
+.emo {
+  flex-wrap: wrap;
+  max-height: 112px;
+  overflow: auto;
+}
