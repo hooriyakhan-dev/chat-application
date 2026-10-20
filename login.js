@@ -1,6 +1,5 @@
 
      window.$ = window.$ || ((i) => document.getElementById(i));
-      const $ = (i) => document.getElementById(i);
       const toast = (m) => {
         const t = $("toast");
         t.textContent = m;
