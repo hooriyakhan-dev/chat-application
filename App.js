@@ -1,4 +1,6 @@
-
+/* Hoories - chat page (index.html)
+   Uses: Firebase (login check, real-time chats), Cloudinary (photo uploads),
+   Groq (Hoories AI). The keys are read from env.js. */
 const $ = (i) => document.getElementById(i);
 const toast = (m) => {
   const t = $("toast");
@@ -153,17 +155,35 @@ function list() {
     $("list").innerHTML =
       '<p style="padding:24px;color:var(--mut)">No chats yet. Tap + and add someone by their username.</p>';
 }
-function renderList() {
-  const q = $("q").value.toLowerCase();
-  $("list").innerHTML = [...C]
-    .filter((c) => c.id !== "bot" && c.name.toLowerCase().includes(q))
-    .sort((a, b) => last(b).at - last(a).at)
-    .map((c) => {
-      const l = last(c);
-      return `<button class="it ${c.id === cur ? "on" : ""}" data-id="${c.id}">${av(c)}<span class="mid"><b>${esc(c.name)}</b><small>${l.from === "me" ? "You: " : c.group && who(l.from) ? esc(who(l.from).name) + ": " : ""}${esc(l.text)}</small></span><span class="rt">${tf(l.at)}${c.u ? `<span class="badge">${c.u}</span>` : ""}</span></button>`;
-    })
-    .join("");
+const FAVS = {}; // chats marked with a star: { chatId: true }
+function chatRow(c) {
+  const l = last(c);
+  return `<button class="it ${c.id === cur ? "on" : ""}" data-id="${c.id}">${av(c)}<span class="mid"><b>${esc(c.name)}</b><small>${l.from === "me" ? "You: " : c.group && who(l.from) ? esc(who(l.from).name) + ": " : ""}${isPic(l.img) ? "📷 " : ""}${esc(l.text || (isPic(l.img) ? "Photo" : ""))}</small></span><span class="rt">${tf(l.at)}${c.u ? `<span class="badge">${c.u}</span>` : ""}</span></button>`;
 }
+function renderList() {
+  const q = $("q").value.toLowerCase(),
+    shown = [...C]
+      .filter((c) => c.id !== "bot" && c.name.toLowerCase().includes(q))
+      .sort((a, b) => last(b).at - last(a).at),
+    favs = shown.filter((c) => FAVS[c.id]),
+    rest = shown.filter((c) => !FAVS[c.id]);
+  $("list").innerHTML =
+    (favs.length
+      ? '<div class="sec">★ Favorites</div>' +
+        favs.map(chatRow).join("") +
+        (rest.length ? '<div class="sec">All chats</div>' : "")
+      : "") + rest.map(chatRow).join("");
+}
+$("fav").onclick = () => {
+  const on = !FAVS[cur];
+  if (on) FAVS[cur] = true;
+  else delete FAVS[cur];
+  all();
+  toast(on ? "Added to favorites" : "Removed from favorites");
+  fb.D.set(R("users/" + me.uid + "/favs/" + cur), on ? true : null).catch((x) =>
+    toast(errMsg(x)),
+  );
+};
 $("q").oninput = list;
 $("list").onclick = (e) => {
   const b = e.target.closest(".it");
@@ -182,6 +202,9 @@ function renderRoom() {
   $("hn").textContent = c.name;
   $("hr").textContent = c.role;
   $("hed").hidden = !!c.group; // only people can be renamed
+  $("fav").hidden = c.id === "bot";
+  $("att").hidden = c.id === "bot";
+  $("fav").classList.toggle("on", !!FAVS[c.id]);
   $("hs").className = c.typing ? "t" : "";
   $("hs").textContent = c.typing
     ? c.group
@@ -204,7 +227,7 @@ function renderRoom() {
         const q = m.rp
           ? `<button type="button" class="qt" data-j="${m.rp.id}"><b>${esc(m.rp.name)}</b><span>${esc(m.rp.text)}</span></button>`
           : "";
-        return `<div class="row ${mine ? "me" : ""} ${f ? "f" : ""}" id="m-${m.id}">${f ? av(u, "sm").replace("<i></i>", "") : '<span style="width:32px;flex:none"></span>'}<div class="bub">${f && !mine && c.group ? `<div class="nm">${esc(u.name)}</div>` : ""}${q}${m.from === "bot" ? md2(m.text) + `<button class="cp" data-cp="${m.id}">Copy</button>` : esc(m.text)}${rxHtml(m)}<span class="tm">${tf(m.at)}${mine ? ` <span class="tk">${m.rd ? "✓✓" : "✓"}</span>` : ""}</span></div><button class="rp" data-x="${m.id}" aria-label="React" title="React">☺</button><button class="rp" data-r="${m.id}" aria-label="Reply" title="Reply">↩</button></div>`;
+        return `<div class="row ${mine ? "me" : ""} ${f ? "f" : ""}" id="m-${m.id}">${f ? av(u, "sm").replace("<i></i>", "") : '<span style="width:32px;flex:none"></span>'}<div class="bub">${f && !mine && c.group ? `<div class="nm">${esc(u.name)}</div>` : ""}${q}${m.from === "bot" ? md2(m.text) + `<button class="cp" data-cp="${m.id}">Copy</button>` : picHtml(m) + linkify(m.text)}${rxHtml(m)}<span class="tm">${tf(m.at)}${mine ? ` <span class="tk">${m.rd ? "✓✓" : "✓"}</span>` : ""}</span></div><button class="rp" data-x="${m.id}" aria-label="React" title="React">☺</button><button class="rp" data-r="${m.id}" aria-label="Reply" title="Reply">↩</button></div>`;
       })
       .join("");
   $("msgs").scrollTop = 1e9;
@@ -230,6 +253,62 @@ $("msgs").onclick = (e) => {
     $("tx").focus();
   }
 };
+/* ---------- sending messages, photos (Cloudinary) and links ---------- */
+function sendMsg(c, extra, rp) {
+  return fb.D.push(R(msgPath(c)), {
+    from: me.uid,
+    name: me.name,
+    h: me.h,
+    photo: me.photo.startsWith("blob:") ? "" : me.photo,
+    at: Date.now(),
+    rp: rp || null,
+    ...extra,
+  });
+}
+const isPic = (u) =>
+  typeof u === "string" && u.startsWith("https://res.cloudinary.com/"); // only our own Cloudinary photos are shown
+const picHtml = (m) =>
+  isPic(m.img)
+    ? `<img class="pic" src="${m.img}" alt="Photo" loading="lazy" data-pic="${m.img}">`
+    : "";
+const linkify = (t) =>
+  esc(t).replace(
+    /(https?:\/\/[^\s<]+)/g,
+    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>',
+  );
+$("att").onclick = () => $("pic").click();
+$("pic").onchange = async (e) => {
+  const f = e.target.files[0];
+  e.target.value = "";
+  if (!f || cur === "bot") return;
+  const c = g(cur),
+    rp = reply;
+  toast("Uploading photo...");
+  try {
+    const url = await uploadToCloudinary(f);
+    if (!isPic(url))
+      return toast("Cloudinary isn't set up, so photos can't be shared");
+    reply = null;
+    $("rb").hidden = true;
+    const caption = $("tx").value.trim().slice(0, 1000);
+    $("tx").value = "";
+    await sendMsg(c, { text: caption, img: url }, rp);
+  } catch {
+    toast("Photo upload failed, try again");
+  }
+};
+/* tap a photo to see it big */
+$("msgs").addEventListener("click", (e) => {
+  const p = e.target.closest("[data-pic]");
+  if (!p) return;
+  $("lbi").src = p.dataset.pic;
+  $("lb").hidden = false;
+});
+$("lb").onclick = () => ($("lb").hidden = true);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") $("lb").hidden = true;
+});
+
 /* ---------- reactions ---------- */
 const REACTIONS = ["👍", "❤️", "😂", "😮", "😢", "🙏"];
 let pickId = null;
@@ -313,10 +392,6 @@ $("emo").innerHTML = [
   "👋",
   "🤝",
   "😴",
-  "👻",
-  "👽",
-
-  
 ]
   .map((x) => `<button type="button">${x}</button>`)
   .join("");
@@ -362,7 +437,7 @@ $("profv").onclick = (e) => {
   }
 };
 /* ---------- Hoories AI (Groq) ---------- */
-const GROQ_KEY = ENV.GROQ_API_KEY; 
+const GROQ_KEY = ENV.GROQ_API_KEY || ""; // <- apni Groq API key yahan lagayein
 const GROQ_MODEL = "llama-3.3-70b-versatile";
 const aiTools = [
   {
@@ -507,8 +582,11 @@ $("aifab").onclick = () => {
   else all();
   setTimeout(() => $("tx").focus(), 60);
 };
+const BASE_TITLE = document.title;
 function all() {
   renderApp();
+  const unread = C.reduce((n, c) => n + (c.u || 0), 0);
+  document.title = (unread ? "(" + unread + ") " : "") + BASE_TITLE;
   const u = g("bot").u;
   $("aib").textContent = u || "";
   $("aib").hidden = !u;
@@ -651,6 +729,7 @@ function listen(c) {
         at: new Date(d.at),
         rp: d.rp || null,
         rx: d.reactions || {},
+        img: d.img || "",
         rd: true,
       });
       if (!mine && d.at > t0 && !(cur === c.id && view === "chat")) c.u++;
@@ -692,10 +771,10 @@ function mk(pid, chatId, u) {
 function mkGroup() {
   const c = {
     id: "community",
-    name: "Blooming Bonds 🌸",
+    name: "The Cozy Corner",
     role: "Group · everyone",
     h: 330,
-    ic: "👥",
+    ic: "☕",
     group: true,
     m: [],
     u: 0,
@@ -715,6 +794,7 @@ function start(user, p) {
     h: p.h || 40,
     username: p.username,
   };
+  Object.assign(FAVS, p.favs || {});
   mkGroup();
   cur = "community"; // open the group first, so the app never looks empty
   unsubs.push(
@@ -792,15 +872,7 @@ $("cf").onsubmit = (e) => {
     askAI(t, m);
     return;
   }
-  fb.D.push(R(msgPath(g(id))), {
-    from: me.uid,
-    name: me.name,
-    h: me.h,
-    photo: me.photo.startsWith("blob:") ? "" : me.photo,
-    text: t.slice(0, 1000),
-    at: Date.now(),
-    rp: rp || null,
-  }).catch((x) => toast(errMsg(x)));
+  sendMsg(g(id), { text: t.slice(0, 1000) }, rp).catch((x) => toast(errMsg(x)));
 };
 
 $("addp").onclick = () => {

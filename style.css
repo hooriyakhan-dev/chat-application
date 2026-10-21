@@ -23,27 +23,25 @@ html[data-th="dark"] {
   --tl: #f3d58a;
 }
 html[data-th="light"] {
-  --bg: #f2d2c4;
-  --pn: rgba(235, 198, 185, 0.9);
-  --pn2: rgba(215, 168, 152, 0.45);
-  --tx: #2e171b;
-  --mut: rgba(46, 23, 27, 0.72);
-  --line: rgba(46, 23, 27, 0.15);
-  --acc: linear-gradient(120deg, #c7385a, #d64d6d);
+  --bg: #efc9c9;
+  --pn: rgba(90, 30, 40, 0.09);
+  --pn2: rgba(90, 30, 40, 0.15);
+  --tx: #2b1519;
+  --mut: rgba(43, 21, 25, 0.66);
+  --line: rgba(43, 21, 25, 0.16);
+  --acc: linear-gradient(120deg, #d94a6c, #e8647f);
   --acx: #fff;
-  --mine: linear-gradient(135deg, #c7385a, #ad2c4b);
+  --mine: linear-gradient(135deg, #d94a6c, #c23a5e);
   --mtx: #fff;
-  --them: #e0b8ab;
-  --g1: #e6b8a8;
-  --g2: #dfa08e;
-  --g3: #d19a86;
-  --inp: rgba(46, 23, 27, 0.06);
-  --acn: #ad2c4b;
-  --ring: linear-gradient(135deg, #c7385a, #d48255, #d6aa52);
-  --tl: #8c5512;
+  --them: #f7e3d9;
+  --g1: #ffd9d1;
+  --g2: #f7b5a8;
+  --g3: #f3d58a;
+  --inp: rgba(90, 30, 40, 0.1);
+  --acn: #b8324f;
+  --ring: linear-gradient(135deg, #d94a6c, #f0a05a, #f3d58a);
+  --tl: #d79a1f;
 }
-
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -2935,4 +2933,130 @@ html[data-th="light"] .sky i:nth-child(3) {
   flex-wrap: wrap;
   max-height: 112px;
   overflow: auto;
+}
+
+/* ---- favorites ---- */
+.sec {
+  font: 600 11.5px var(--b);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mut);
+  padding: 12px 14px 4px;
+}
+#fav.on .ic {
+  fill: var(--tl);
+  color: var(--tl);
+}
+
+/* ---- light theme, richer look (the dark theme is not touched) ---- */
+html[data-th="light"] {
+  --bg: #f7ecdf;
+  --pn: rgba(255, 252, 247, 0.74);
+  --pn2: rgba(232, 196, 160, 0.32);
+  --tx: #2b1d22;
+  --mut: rgba(43, 29, 34, 0.62);
+  --line: rgba(120, 70, 60, 0.16);
+  --them: #fffaf3;
+  --mine: linear-gradient(135deg, #c9506b, #9c3350);
+  --g1: #ffd6c2;
+  --g2: #f6b1bd;
+  --g3: #f2d27f;
+  --inp: rgba(255, 255, 255, 0.85);
+}
+html[data-th="light"] body {
+  background:
+    radial-gradient(
+      1100px 700px at 8% -10%,
+      rgba(255, 196, 170, 0.75),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 640px at 100% 0%,
+      rgba(246, 177, 189, 0.55),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 700px at 70% 110%,
+      rgba(242, 210, 127, 0.5),
+      transparent 60%
+    ),
+    var(--bg);
+}
+html[data-th="light"] .sky i {
+  opacity: 0.5;
+}
+html[data-th="light"] .card,
+html[data-th="light"] .rail,
+html[data-th="light"] .list,
+html[data-th="light"] .room,
+html[data-th="light"] .dash {
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 24px 60px -28px rgba(156, 51, 80, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+html[data-th="light"] .it:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+html[data-th="light"] .it.on {
+  background: linear-gradient(
+    90deg,
+    rgba(201, 80, 107, 0.16),
+    rgba(242, 210, 127, 0.22)
+  );
+  box-shadow: inset 3px 0 0 var(--acn);
+}
+html[data-th="light"] .bub {
+  border: 1px solid rgba(214, 170, 130, 0.4);
+  box-shadow: 0 8px 20px -12px rgba(120, 60, 40, 0.45);
+}
+html[data-th="light"] .me .bub {
+  border-color: transparent;
+  box-shadow: 0 10px 24px -12px rgba(156, 51, 80, 0.65);
+}
+html[data-th="light"] .msgs {
+  background: radial-gradient(rgba(176, 64, 92, 0.07) 1px, transparent 1.4px) 0
+    0 / 22px 22px;
+}
+html[data-th="light"] .comp input {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 1px 3px rgba(120, 60, 40, 0.08);
+}
+html[data-th="light"] .comp input:focus {
+  border-color: var(--acn);
+  box-shadow: 0 0 0 4px rgba(176, 64, 92, 0.14);
+}
+
+/* ---- photos and links in messages ---- */
+.pic {
+  display: block;
+  width: 260px;
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 14px;
+  margin-bottom: 6px;
+  object-fit: cover;
+  cursor: zoom-in;
+}
+.lb {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.82);
+  cursor: zoom-out;
+}
+.lb[hidden] {
+  display: none;
+}
+.lb img {
+  max-width: 92vw;
+  max-height: 90vh;
+  border-radius: 14px;
+}
+.bub a {
+  color: inherit;
+  text-decoration: underline;
+  word-break: break-all;
 }
