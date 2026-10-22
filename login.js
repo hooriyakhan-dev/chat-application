@@ -143,7 +143,16 @@
       async function ensureProfile(user, name, photo) {
         const r = fb.D.ref(fb.db, "users/" + user.uid),
           s = await fb.D.get(r);
-        if (s.exists()) return;
+        if (s.exists()) {
+          const p = s.val() || {};
+          await fb.D.set(fb.D.ref(fb.db, "publicProfiles/" + user.uid), {
+            name: p.name || name || user.displayName || "Hoories user",
+            username: p.username || "",
+            photo: p.priv && p.priv.dp && p.priv.dp !== "all" ? "" : (p.photo || ""),
+            h: p.h || 40,
+          }).catch(() => {});
+          return;
+        }
         const p = {
           name: name || user.displayName || user.email.split("@")[0],
           photo: photo || user.photoURL || "",
@@ -151,6 +160,9 @@
         };
         p.username = await makeUsername(user.email.split("@")[0], user.uid);
         await fb.D.set(r, p);
+        await fb.D.set(fb.D.ref(fb.db, "publicProfiles/" + user.uid), {
+          name: p.name, username: p.username, photo: p.photo, h: p.h,
+        }).catch(() => {});
       }
 
       $("af").onsubmit = async (e) => {
